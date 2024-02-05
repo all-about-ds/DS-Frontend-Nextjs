@@ -1,7 +1,7 @@
 import axios from "axios";
-import tokenService from "@/utils/tokenService";
-import { NEXT_PUBLIC_BASE_URL } from "@/shared/config";
-import { authUrls } from "@/api/url/auth.url";
+import tokenService from "@/app/_utils/tokenService";
+import { NEXT_PUBLIC_BASE_URL } from "@/app/_shared/config";
+import { authUrls } from "@/app/_api/url/auth.url";
 
 export const instance = axios.create({
   baseURL: NEXT_PUBLIC_BASE_URL,

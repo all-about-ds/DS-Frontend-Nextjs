@@ -1,4 +1,4 @@
-import { NEXT_PUBLIC_BASE_URL } from "@/shared/config";
+import { NEXT_PUBLIC_BASE_URL } from "@/app/_shared/config";
 
 export const authUrls = {
   tokenReissuance: () => {
