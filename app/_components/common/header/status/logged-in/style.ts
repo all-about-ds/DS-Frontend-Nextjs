@@ -17,7 +17,7 @@ export const HeaderContentBox = styled.div<{ isSearching: boolean }>`
   justify-content: space-between;
   gap: 10px;
 
-  .search {
+  .search-icon {
     margin-top: 4px;
 
     svg {
@@ -25,7 +25,7 @@ export const HeaderContentBox = styled.div<{ isSearching: boolean }>`
     }
   }
 
-  .home {
+  .home-icon {
     @media screen and (max-width: 630px) {
       display: none;
       width: 150px;
@@ -83,7 +83,7 @@ export const SearchBar = styled.div`
   @media screen and (max-width: 630px) {
     width: 36vw;
 
-    .search {
+    .input-search-icon {
       display: none;
     }
   }
