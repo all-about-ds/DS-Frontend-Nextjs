@@ -4,6 +4,7 @@ export {
   HomeIcon,
   HeaderSearchIcon,
   InputSearchIcon,
+  LockIcon,
 } from "./svg/Icons";
 export {
   DefaultProfileImage,
