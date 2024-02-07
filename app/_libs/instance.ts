@@ -1,7 +1,7 @@
 import axios from "axios";
 import tokenService from "@/app/_utils/tokenService";
 import { NEXT_PUBLIC_BASE_URL } from "@/app/_shared/config";
-import { authUrls } from "@/app/_api/url/auth.url";
+import { authRequestUrls } from "@/app/_api/url/auth.url";
 
 export const instance = axios.create({
   baseURL: NEXT_PUBLIC_BASE_URL,
@@ -58,7 +58,7 @@ function getAuthToken() {
 function makeActualAuthenticationRequest() {
   return axios({
     method: "PATCH",
-    url: authUrls.tokenReissuance(),
+    url: authRequestUrls.tokenReissuance(),
     headers: {
       RefreshToken: tokenService.getLocalRefreshToken(),
     },
