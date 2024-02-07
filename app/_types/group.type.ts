@@ -9,3 +9,10 @@ export type GroupType = {
   leaderName: string;
   secret: boolean;
 };
+
+export type RequestGroupListType = {
+  keyword: string | undefined;
+  page: number;
+  size: number;
+  popularity: boolean;
+};
