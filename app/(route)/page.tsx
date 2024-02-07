@@ -1,3 +1,5 @@
-export default function Home() {
-  return <strong style={{ color: "white" }}>안녕하세요</strong>;
+import MainPage from "@/app/_components/page/main";
+
+export default function Main() {
+  return <MainPage />;
 }
