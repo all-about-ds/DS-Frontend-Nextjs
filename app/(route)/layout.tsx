@@ -1,8 +1,6 @@
-import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import GlobalStyle from "./global-style";
-
-const inter = Inter({ subsets: ["latin"] });
+import Header from "@/app/_components/common/header";
 
 export const metadata: Metadata = {
   title: "Do Study",
@@ -16,9 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="ko">
       <GlobalStyle />
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
