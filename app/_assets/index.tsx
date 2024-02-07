@@ -1,7 +1,10 @@
 export { HeaderLogo } from "./svg/HeaderLogo";
-export { HeaderSearchIcon, InputSearchIcon } from "./svg/SearchIcons";
-export { HomeIcon } from "./svg/HomeIcon";
-export { MakeGroupIcon } from "./svg/MakeGroupIcon";
+export {
+  MakeGroupIcon,
+  HomeIcon,
+  HeaderSearchIcon,
+  InputSearchIcon,
+} from "./svg/Icons";
 export {
   DefaultProfileImage,
   MyPageDefaultProfileImage,
