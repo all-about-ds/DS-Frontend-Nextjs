@@ -11,27 +11,18 @@ export const MainPageLayout = styled.main`
 `;
 
 export const SortButtonsWrapper = styled.nav`
-  width: 85px;
   height: 21px;
   display: flex;
-  justify-content: space-between;
+  gap: 20px;
 `;
 
-export const SortButton = styled.p<{ sortType: string }>`
+export const SortButton = styled.p<{ isActive: boolean }>`
+  color: ${(props) =>
+    props.isActive ? "#ffffff" : "rgba(255, 255, 255, 0.4)"};
   font-weight: 400;
   font-size: 15px;
   font-family: AppleSDGothicNeoB00;
   cursor: pointer;
-
-  .latest {
-    color: ${(props) =>
-      props.sortType === "최신순" ? "#ffffff" : "rgba(255, 255, 255, 0.4)"};
-  }
-
-  .popular {
-    color: ${(props) =>
-      props.sortType === "인기순" ? "#ffffff" : "rgba(255, 255, 255, 0.4)"};
-  }
 `;
 
 export const PostCardWrapper = styled.section`
