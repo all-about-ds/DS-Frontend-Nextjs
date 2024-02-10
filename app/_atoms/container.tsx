@@ -26,3 +26,21 @@ export const UserIdAtom = atom({
   default: 0,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const CurrentSectionsAtomFamily = atomFamily({
+  key: "currentSection",
+  default: 1,
+});
+
+export const TimerAtomFamily = atomFamily({
+  key: "currentTimer",
+  default: {
+    minute: 5,
+    seconds: 0,
+  },
+});
+
+export const AuthEmailAtomFamily = atomFamily({
+  key: "authEmail",
+  default: "",
+});

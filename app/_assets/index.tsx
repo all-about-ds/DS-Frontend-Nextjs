@@ -6,6 +6,10 @@ export {
   InputSearchIcon,
   LockIcon,
   ExitIcon,
+  AuthExitIcon,
+  AuthGoBackIcon,
+  ShowPasswordIcon,
+  HidePasswordIcon,
 } from "./svg/Icons";
 export {
   DefaultProfileImage,
