@@ -4,4 +4,12 @@ export const groupRequestUrls = {
   getGroupList: () => {
     return NEXT_PUBLIC_BASE_URL + "group";
   },
+
+  joinGroup: () => {
+    return "group/join";
+  },
+
+  isMember: () => {
+    return "group/detail/";
+  },
 };
