@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import GlobalStyle from "./global-style";
 import Header from "@/app/_components/common/header";
+import RecoilRootWrapper from "./recoil-root-wrapper";
 
 export const metadata: Metadata = {
   title: "Do Study",
@@ -15,11 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <GlobalStyle />
-      <body>
-        <Header />
-        {children}
-      </body>
+      <RecoilRootWrapper>
+        <GlobalStyle />
+        <body>
+          <Header />
+          {children}
+        </body>
+      </RecoilRootWrapper>
     </html>
   );
 }
