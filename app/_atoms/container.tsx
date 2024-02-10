@@ -15,3 +15,14 @@ export const UserDataAtomFamily = atomFamily({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const ModalAtomFamily = atomFamily({
+  key: "modal",
+  default: false,
+});
+
+export const UserIdAtom = atom({
+  key: "userId",
+  default: 0,
+  effects_UNSTABLE: [persistAtom],
+});
