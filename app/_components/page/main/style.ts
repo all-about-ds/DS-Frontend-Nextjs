@@ -44,3 +44,9 @@ export const PostCardWrapper = styled.section`
     grid-template-columns: repeat(1, 1fr);
   }
 `;
+
+export const SearchResultIsNone = styled.p`
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 15px;
+`;
