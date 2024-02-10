@@ -9,7 +9,7 @@ type MainPostCardPropsType = {
 export default function MainPostCard(props: MainPostCardPropsType) {
   return (
     <>
-      <S.GroupBox>
+      <S.PostCard>
         <div style={{ position: "relative" }}>
           <S.Thumbnail
             src={props.cardProps?.img}
@@ -42,7 +42,7 @@ export default function MainPostCard(props: MainPostCardPropsType) {
           )}
           <S.UserName>{props.cardProps?.leaderName}</S.UserName>
         </S.User>
-      </S.GroupBox>
+      </S.PostCard>
     </>
   );
 }
