@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import * as S from "./style";
 import { useRouter } from "next/navigation";
-import BaseModal from "@/app/_components/modal/base";
+import BaseModal from "@/app/_components/common/layout/modal";
 import { ModalAtomFamily, UserDataAtomFamily, UserIdAtom } from "@/app/_atoms";
 import groupRequest from "@/app/_api/request/group.request";
 

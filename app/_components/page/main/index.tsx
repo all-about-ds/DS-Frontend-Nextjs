@@ -7,10 +7,10 @@ import groupRequest from "@/app/_api/request/group.request";
 import MainPostCard from "@/app/_components/ui/post-card/main";
 import { ModalAtomFamily, SearchAtom } from "@/app/_atoms";
 import { useRecoilState } from "recoil";
-import JoinGroupModal from "@/app/_components/modal/modals/join-group";
+import JoinGroupModal from "@/app/_components/modal/join-group";
 import tokenService from "@/app/_utils/tokenService";
 import { useRouter } from "next/navigation";
-import CheckPasswordModal from "@/app/_components/modal/modals/check-password";
+import CheckPasswordModal from "@/app/_components/modal/check-password";
 
 type PostsSortingType = "최신순" | "인기순";
 

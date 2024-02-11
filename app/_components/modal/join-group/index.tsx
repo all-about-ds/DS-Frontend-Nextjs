@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { ref, set } from "@firebase/database";
 import { db } from "@/app/_shared/firebase";
-import BaseModal from "../../base";
+import BaseModal from "@/app/_components/common/layout/modal";
 import { GroupType } from "@/app/_types/group.type";
 import { ModalAtomFamily, UserDataAtomFamily, UserIdAtom } from "@/app/_atoms";
 import { useRouter } from "next/navigation";
