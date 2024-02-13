@@ -1,5 +1,5 @@
 import { ModalAtomFamily } from "@/app/_atoms";
-import CenterAlignmentLayout from "@/app/_components/common/layout/center";
+import CenterAlignmentLayout from "@/app/_components/common/layout/alignment";
 import { SetterOrUpdater, useRecoilState } from "recoil";
 import AuthFrame from "@/app/_components/ui//auth/frame";
 import EmailErrorModal from "@/app/_components/modal/email-error";
