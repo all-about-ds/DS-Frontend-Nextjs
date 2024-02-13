@@ -30,7 +30,6 @@ export const UserIdAtom = atom({
 export const CurrentSectionsAtomFamily = atomFamily({
   key: "currentSection",
   default: 1,
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const TimerAtomFamily = atomFamily({
@@ -39,11 +38,9 @@ export const TimerAtomFamily = atomFamily({
     minute: 5,
     seconds: 0,
   },
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const AuthEmailAtomFamily = atomFamily({
   key: "authEmail",
   default: "",
-  effects_UNSTABLE: [persistAtom],
 });
