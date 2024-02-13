@@ -4,10 +4,11 @@ import * as S from "./style";
 import * as Image from "@/app/_assets/index";
 import { useEffect, useState } from "react";
 import userRequest from "@/app/_api/request/user.request";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function LoggedInHeader() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isSearching, setIsSearching] = useState(false);
   const [searchValues, setSearchValues] = useRecoilState(SearchAtom);
   const [userName, setUserName] = useRecoilState(UserDataAtomFamily("name"));
@@ -15,7 +16,7 @@ export default function LoggedInHeader() {
 
   const getUser = async () => {
     try {
-      const response: any = await userRequest.getUserData();
+      const response: any = await userRequest.getHeaderData();
 
       setUserName(response.data.name);
       setUserImage(response.data.img);
@@ -26,7 +27,7 @@ export default function LoggedInHeader() {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [pathname]);
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValues((oldValue) => ({
