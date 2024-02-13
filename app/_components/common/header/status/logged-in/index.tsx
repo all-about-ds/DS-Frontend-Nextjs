@@ -91,7 +91,7 @@ export default function LoggedInHeader() {
             onClick={() => router.push("/my-page")}
           />
         )}
-        <S.UserName>{userName}</S.UserName>
+        <S.UserName>{userName}님</S.UserName>
       </S.HeaderContentBox>
     </>
   );

@@ -5,10 +5,10 @@ import Link from "next/link";
 export default function NotLoggedInHeader() {
   return (
     <S.HeaderContentBox>
-      <Link href={"/auth/signin"}>
+      <Link href={"/login"}>
         <S.Text>로그인</S.Text>
       </Link>
-      <Link href={"/auth/signup "}>
+      <Link href={"/signup "}>
         <S.Text>회원가입</S.Text>
       </Link>
     </S.HeaderContentBox>
