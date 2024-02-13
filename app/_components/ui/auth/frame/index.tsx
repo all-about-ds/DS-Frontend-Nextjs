@@ -11,10 +11,10 @@ interface AuthFrameProps extends React.HTMLAttributes<HTMLElement> {
   title: string;
   progressBarValue?: number;
   setSection?: SetterOrUpdater<number>;
-  atomKey?: "signup" | "findPassword";
+  atomKey?: "signup" | "find-password";
 }
 
-function AuthFrame(props: AuthFrameProps) {
+export default function AuthFrame(props: AuthFrameProps) {
   const authEmail = useRecoilValue(AuthEmailAtomFamily(props.atomKey));
   const section = useRecoilValue(CurrentSectionsAtomFamily(props.atomKey));
   const router = useRouter();
@@ -26,7 +26,7 @@ function AuthFrame(props: AuthFrameProps) {
           await authRequest.sendSignupAuthenticationNumber(authEmail);
           break;
         }
-        case "findPassword": {
+        case "find-password": {
           await authRequest.sendFindPasswordAuthenticationNumber(authEmail);
           break;
         }
@@ -35,6 +35,8 @@ function AuthFrame(props: AuthFrameProps) {
 
     props.setSection?.((oldValue: number) => {
       if (oldValue === 1) {
+        return 1;
+      } else if (oldValue === 3) {
         return 1;
       } else {
         return oldValue - 1;
@@ -69,5 +71,3 @@ function AuthFrame(props: AuthFrameProps) {
     </S.AuthFrame>
   );
 }
-
-export default AuthFrame;
