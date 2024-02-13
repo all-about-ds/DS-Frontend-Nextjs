@@ -6,7 +6,7 @@ export const DescWrapper = styled.div`
   display: flex;
   background: #1c1c1c;
   border-radius: 10px;
-  margin: 18px 0 1.22vh;
+  margin: 2.25rem 0 1.22vh;
   align-items: center;
 `;
 
@@ -29,62 +29,6 @@ export const DescText = styled.p`
   font-size: 12px;
   color: #acacac;
   margin-right: 12px;
-`;
-
-export const InputWrapper = styled.div`
-  width: 16.5vw;
-  min-width: 284px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 2.08vh;
-`;
-
-export const InputText = styled.p<{ isError: boolean }>`
-  font-weight: 400;
-  font-size: 13px;
-  color: ${(props) => (props.isError ? "#EE3939" : "rgba(255, 255, 255, 0.9)")};
-  margin: 0 0 10px 8px;
-`;
-
-export const InputBox = styled.input<{ isError: boolean }>`
-  width: 15.5vw;
-  min-width: 266px;
-  height: 40px;
-  border-radius: 10px;
-  color: rgba(255, 255, 255, 0.9);
-  padding-left: 16px;
-  border: ${(props) => (props.isError ? "1px solid #EE3939" : "none")};
-  background: ${(props) => (props.isError ? "#412626" : "#232323")};
-
-  ::placeholder {
-    color: ${(props) =>
-      props.isError ? "#EE3939" : "rgba(255, 255, 255, 0.35)"};
-  }
-`;
-
-export const Button = styled.button<{ isError: boolean }>`
-  width: 16.5vw;
-  min-width: 284px;
-  height: 40px;
-  background: #7848de;
-  border-radius: 10px;
-  border-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 400;
-  font-size: 15px;
-  color: #ffffff;
-  cursor: pointer;
-  margin-top: ${(props) => (props.isError ? "7.5vh" : "10.32vh")};
-
-  &:hover {
-    border: 1px solid #7848de;
-    border-radius: 10px;
-    color: #7848de;
-    background: none;
-    box-sizing: border-box;
-  }
 `;
 
 export const BottomTextBox = styled.div`
