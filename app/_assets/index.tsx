@@ -8,6 +8,8 @@ export {
   ExitIcon,
   AuthExitIcon,
   AuthGoBackIcon,
+  ShowPasswordIcon,
+  HidePasswordIcon,
 } from "./svg/Icons";
 export {
   DefaultProfileImage,
