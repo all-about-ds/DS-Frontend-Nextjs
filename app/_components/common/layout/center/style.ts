@@ -6,5 +6,6 @@ export const CenterAlignmentLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background: #101010;
 `;
