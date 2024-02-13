@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import LoadingSpinner from "@/app/_components/ui/loading";
 import { LoginType } from "@/app/_types/auth.type";
 import authRequest from "@/app/_api/request/auth.request";
-import CenterAlignmentLayout from "@/app/_components/common/layout/center";
+import CenterAlignmentLayout from "@/app/_components/common/layout/alignment";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import PurpleButton from "@/app/_components/ui/button/purple";
