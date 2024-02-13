@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import GlobalStyle from "./global-style";
 import Header from "@/app/_components/common/header";
 import RecoilRootWrapper from "./recoil-root-wrapper";
+import ToastProvider from "./toast-provider";
 
 export const metadata: Metadata = {
   title: "Do Study",
@@ -19,8 +20,10 @@ export default function RootLayout({
       <RecoilRootWrapper>
         <GlobalStyle />
         <body>
-          <Header />
-          {children}
+          <ToastProvider>
+            <Header />
+            {children}
+          </ToastProvider>
         </body>
       </RecoilRootWrapper>
     </html>
