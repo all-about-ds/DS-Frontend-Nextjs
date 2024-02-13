@@ -12,16 +12,19 @@ import authRequest from "@/app/_api/request/auth.request";
 import CenterAlignmentLayout from "@/app/_components/common/layout/center";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import PurpleButton from "@/app/_components/ui/button/purple";
+import NormalInput from "@/app/_components/ui/input";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [isError, setError] = useState<boolean>(false);
-  const [isRequestEnd, setIsRequestEnd] = useState<boolean>(true);
+  const [isError, setError] = useState(false);
+  const [isRequestEnd, setIsRequestEnd] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>("");
 
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<LoginType>();
 
   const onValid = async (data: LoginType) => {
@@ -47,7 +50,22 @@ export default function LoginPage() {
     }
   };
 
-  const inValid = () => setError(true);
+  const inValid = () => {
+    const emailErrorMessage = errors?.email?.message;
+    const passwordErrorMessage = errors?.password?.message;
+
+    if (emailErrorMessage) {
+      setErrorMessage(emailErrorMessage);
+    } else if (passwordErrorMessage) {
+      setErrorMessage(passwordErrorMessage);
+    } else if (emailErrorMessage && passwordErrorMessage) {
+      setErrorMessage(errors?.email?.message);
+    } else {
+      setErrorMessage("이메일은 필수 입력입니다.");
+    }
+
+    setError(true);
+  };
 
   return (
     <CenterAlignmentLayout>
@@ -60,48 +78,48 @@ export default function LoginPage() {
           </S.DescText>
         </S.DescWrapper>
         <form onSubmit={handleSubmit(onValid, inValid)}>
-          <S.InputWrapper>
-            <S.InputText isError={isError}>이메일</S.InputText>
-            <S.InputBox
-              isError={isError}
-              placeholder="이메일을 입력해주세요"
-              {...register("email", {
-                required: "이메일은 필수 입력입니다.",
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: "이메일 형식에 맞지 않습니다.",
-                },
-              })}
-            />
-          </S.InputWrapper>
-          <S.InputWrapper>
-            <S.InputText isError={isError}>비밀번호</S.InputText>
-            <S.InputBox
-              type="password"
-              autoComplete="off"
-              isError={isError}
-              placeholder="비밀번호를 입력해주세요"
-              {...register("password", {
-                required: "비밀번호는 필수 입력입니다.",
-                minLength: {
-                  value: 8,
-                  message: "8자 이상 15자 이하 비밀번호를 입력해주세요.",
-                },
-                maxLength: {
-                  value: 15,
-                  message: "8자 이상 15자 이하 비밀번호를 입력해주세요.",
-                },
-              })}
-            />
-          </S.InputWrapper>
+          <NormalInput
+            title="이메일"
+            placeholder="이메일을 입력해주세요"
+            isError={isError}
+            register={register("email", {
+              required: "이메일은 필수 입력입니다.",
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "이메일 형식에 맞지 않습니다.",
+              },
+            })}
+          />
+          <NormalInput
+            title="비밀번호"
+            type={"password"}
+            placeholder="비밀번호를 입력해주세요"
+            margin="2.08vh 0 0 0"
+            autoComplete="off"
+            isError={isError}
+            register={register("password", {
+              required: "비밀번호는 필수 입력입니다.",
+              minLength: {
+                value: 8,
+                message: "8자 이상 15자 이하 비밀번호를 입력해주세요.",
+              },
+              maxLength: {
+                value: 15,
+                message: "8자 이상 15자 이하 비밀번호를 입력해주세요.",
+              },
+            })}
+          />
           {isError && (
             <S.ErrorTextBox>
-              <S.ErrorText>이메일 혹은 비밀번호가 일치하지 않아요</S.ErrorText>
+              <S.ErrorText>{errorMessage}</S.ErrorText>
             </S.ErrorTextBox>
           )}
-          <S.Button isError={isError} disabled={isSubmitting}>
+          <PurpleButton
+            isError={isError}
+            style={{ marginTop: isError ? "7.5vh" : "10.32vh" }}
+          >
             로그인
-          </S.Button>
+          </PurpleButton>
         </form>
         <S.BottomTextBox>
           <S.FirstText>DS가 처음이신가요?</S.FirstText>
@@ -110,7 +128,7 @@ export default function LoginPage() {
           </Link>
         </S.BottomTextBox>
         <S.Bar />
-        <Link href={"/findPassword"}>
+        <Link href={"/find-password"}>
           <S.ClickText>비밀번호 찾기</S.ClickText>
         </Link>
       </AuthFrame>
