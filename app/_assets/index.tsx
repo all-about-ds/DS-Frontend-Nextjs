@@ -1,5 +1,10 @@
 export { HeaderLogo } from "./svg/HeaderLogo";
 export {
+  DefaultProfileImage,
+  MyPageDefaultProfileImage,
+  ChattingDefaultProfileImage,
+} from "./svg/DefaultProfileImages";
+export {
   MakeGroupIcon,
   HomeIcon,
   HeaderSearchIcon,
@@ -10,9 +15,7 @@ export {
   AuthGoBackIcon,
   ShowPasswordIcon,
   HidePasswordIcon,
+  UpdateProfileImageIcon,
+  UpdateNameIcon,
+  NormalIcon,
 } from "./svg/Icons";
-export {
-  DefaultProfileImage,
-  MyPageDefaultProfileImage,
-  ChattingDefaultProfileImage,
-} from "./svg/DefaultProfileImages";
