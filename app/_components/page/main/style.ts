@@ -2,8 +2,7 @@ import styled from "@emotion/styled";
 
 export const MainPageLayout = styled.main`
   width: 66.25vw;
-  margin: 0 auto;
-  margin-top: 3rem;
+  margin: 3rem auto 2rem;
 
   @media screen and (max-width: 1110px) {
     width: 95vw;

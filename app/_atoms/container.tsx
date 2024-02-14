@@ -1,5 +1,6 @@
 import { atom, atomFamily } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { GroupInformationType } from "../_types/group.type";
 const { persistAtom } = recoilPersist();
 
 export const SearchAtom = atom({
@@ -16,15 +17,15 @@ export const UserDataAtomFamily = atomFamily({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const ModalAtomFamily = atomFamily({
-  key: "modal",
-  default: false,
-});
-
 export const UserIdAtom = atom({
   key: "userId",
   default: 0,
   effects_UNSTABLE: [persistAtom],
+});
+
+export const ModalAtomFamily = atomFamily({
+  key: "modal",
+  default: false,
 });
 
 export const CurrentSectionsAtomFamily = atomFamily({
@@ -43,6 +44,28 @@ export const TimerAtomFamily = atomFamily({
 export const AuthEmailAtomFamily = atomFamily({
   key: "authEmail",
   default: "",
+});
+
+export const GroupIsClickedAtom = atom({
+  key: "groupIsClicked",
+  default: false,
+});
+
+export const GroupDataAtom = atom<GroupInformationType>({
+  key: "groupInformation",
+  default: {
+    idx: 0,
+    name: "",
+    img: "",
+    description: "",
+    host: false,
+    head: {
+      idx: 0,
+      name: "",
+      profileImg: "",
+    },
+    memberList: [],
+  },
 });
 
 export const ImageSrcAtom = atom({

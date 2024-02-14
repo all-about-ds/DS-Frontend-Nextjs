@@ -5,12 +5,13 @@ import * as S from "./style";
 import { useCallback, useEffect, useRef, useState } from "react";
 import groupRequest from "@/app/_api/request/group.request";
 import MainPostCard from "@/app/_components/ui/post-card/main";
-import { ModalAtomFamily, SearchAtom } from "@/app/_atoms";
+import { ModalAtomFamily, SearchAtom, UserIdAtom } from "@/app/_atoms";
 import { useRecoilState } from "recoil";
 import JoinGroupModal from "@/app/_components/modal/join-group";
 import tokenService from "@/app/_utils/tokenService";
 import { useRouter } from "next/navigation";
 import CheckPasswordModal from "@/app/_components/modal/check-password";
+import userRequest from "@/app/_api/request/user.request";
 
 type PostsSortingType = "최신순" | "인기순";
 
@@ -22,6 +23,7 @@ export default function MainPage() {
   const observerTargetEl = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState<boolean>(true);
   const [searchValues, setSearchValues] = useRecoilState(SearchAtom);
+  const [, setUserId] = useRecoilState(UserIdAtom);
   const [isNoneSearchResult, setIsNoneSearchResult] = useState(false);
   const [joinGroupModal, setJoinGroupModal] = useRecoilState(
     ModalAtomFamily("join-group")
@@ -33,8 +35,8 @@ export default function MainPage() {
   const router = useRouter();
 
   const onClickPostCard = (props: GroupType) => {
-    if (tokenService.getLocalAccessToken()) {
-      router.push("/signin");
+    if (!tokenService.getLocalAccessToken()) {
+      router.push("login");
     } else {
       setClickedGroupData(props);
       setJoinGroupModal(true);
@@ -101,6 +103,21 @@ export default function MainPage() {
       getGroupList();
     }
   }, [sortBy]);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      try {
+        const res: any = await userRequest.getUserId();
+        setUserId(res.data.uid);
+      } catch (error) {
+        Promise.reject(error);
+      }
+    };
+
+    if (tokenService.getLocalAccessToken()) {
+      getUserId();
+    }
+  }, []);
 
   return (
     <>

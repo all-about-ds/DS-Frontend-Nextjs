@@ -7,3 +7,5 @@ export { TimerAtomFamily } from "./container";
 export { AuthEmailAtomFamily } from "./container";
 export { ImagesAtom } from "./container";
 export { ImageSrcAtom } from "./container";
+export { GroupIsClickedAtom } from "./container";
+export { GroupDataAtom } from "./container";
