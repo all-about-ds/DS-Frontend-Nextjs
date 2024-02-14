@@ -2,7 +2,7 @@ import { NEXT_PUBLIC_BASE_URL } from "@/app/_shared/config";
 
 export const groupRequestUrls = {
   getGroupList: () => {
-    return NEXT_PUBLIC_BASE_URL + "group";
+    return "group";
   },
 
   joinGroup: () => {
@@ -11,5 +11,24 @@ export const groupRequestUrls = {
 
   isMember: () => {
     return "group/detail/";
+  },
+
+  getGroupInformation: () => {
+    return "group/information/";
+  },
+
+  kickMember: () => {
+    return "group/member/";
+  },
+
+  mandateMember: () => {
+    return "group/mandate/";
+  },
+
+  deleteGroup: () => {
+    return "group/";
+  },
+  getGroupTimer: () => {
+    return "group/timer/";
   },
 };
