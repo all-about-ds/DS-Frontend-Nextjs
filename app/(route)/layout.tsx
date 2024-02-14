@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import GlobalStyle from "./global-style";
-import Header from "@/app/_components/common/header";
+import Header from "@/app/_components/common/header/normal-page";
 import RecoilRootWrapper from "./recoil-root-wrapper";
 import ToastProvider from "./toast-provider";
 
