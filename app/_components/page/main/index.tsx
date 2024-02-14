@@ -33,8 +33,8 @@ export default function MainPage() {
   const router = useRouter();
 
   const onClickPostCard = (props: GroupType) => {
-    if (tokenService.getLocalAccessToken()) {
-      router.push("/signin");
+    if (!tokenService.getLocalAccessToken()) {
+      router.push("login");
     } else {
       setClickedGroupData(props);
       setJoinGroupModal(true);
