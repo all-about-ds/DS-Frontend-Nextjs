@@ -16,3 +16,42 @@ export type RequestGroupListType = {
   size: number;
   popularity: boolean;
 };
+
+export type GroupContents = {
+  size: number;
+  page: number;
+  groups: [];
+};
+
+export type PasswordType = {
+  password: string | undefined;
+};
+
+export type MemberType = {
+  idx: number;
+  name: string;
+  profileImg: string;
+};
+
+export type GroupInformationType = {
+  idx: number;
+  name: string;
+  img: string;
+  description: string;
+  host: boolean;
+  head: {
+    idx: number;
+    name: string;
+    profileImg: string;
+  };
+  memberList: MemberType[];
+};
+
+export type CreateGroupType = {
+  name: string;
+  description: string;
+  img: string;
+  maxCount: number;
+  secret: boolean;
+  password: string | undefined;
+};
