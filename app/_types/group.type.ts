@@ -55,3 +55,5 @@ export type CreateGroupType = {
   secret: boolean;
   password: string | undefined;
 };
+
+export type GroupBuilderType = "create" | "edit";
