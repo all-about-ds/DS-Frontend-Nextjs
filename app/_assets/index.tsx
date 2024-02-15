@@ -26,4 +26,8 @@ export {
   TimerIcon,
   FaceTimeIcon,
   OwnerIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+  SubmitArrowIcon,
+  PhotoIcon,
 } from "./svg/Icons";
