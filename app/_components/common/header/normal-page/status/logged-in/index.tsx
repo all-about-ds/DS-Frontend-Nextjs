@@ -74,7 +74,7 @@ export default function LoggedInHeader() {
         <div className="home-icon" onClick={() => router.replace("/")}>
           <Image.HomeIcon />
         </div>
-        <div onClick={() => router.replace("/make-group")}>
+        <div onClick={() => router.replace("/group/create")}>
           <Image.MakeGroupIcon />
         </div>
         {!userImage && (
