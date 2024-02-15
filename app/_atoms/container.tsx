@@ -16,15 +16,15 @@ export const UserDataAtomFamily = atomFamily({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const ModalAtomFamily = atomFamily({
-  key: "modal",
-  default: false,
-});
-
 export const UserIdAtom = atom({
   key: "userId",
   default: 0,
   effects_UNSTABLE: [persistAtom],
+});
+
+export const ModalAtomFamily = atomFamily({
+  key: "modal",
+  default: false,
 });
 
 export const CurrentSectionsAtomFamily = atomFamily({
@@ -43,6 +43,22 @@ export const TimerAtomFamily = atomFamily({
 export const AuthEmailAtomFamily = atomFamily({
   key: "authEmail",
   default: "",
+});
+
+export const GroupIsClickedAtom = atom({
+  key: "groupIsClicked",
+  default: false,
+});
+
+export const GroupIndexAtom = atom({
+  key: "gruopIndex",
+  default: 0,
+});
+
+export const GroupTitleAtom = atom({
+  key: "groupTitle",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const ImageSrcAtom = atom({
