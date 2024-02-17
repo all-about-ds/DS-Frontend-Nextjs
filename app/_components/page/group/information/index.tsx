@@ -35,7 +35,13 @@ export default function GroupInformationPage({ groupId }: { groupId: number }) {
 
   useEffect(() => {
     const checkServerClientSync = () => {
-      if (groupData.name !== "") {
+      if (
+        groupData.name !== "" &&
+        !groupData.memberList.some((member) => member.name === userName)
+      ) {
+        router.replace("/");
+        toast.error("잘못된 접근입니다");
+      } else if (groupData.name !== "") {
         setData(groupData);
       }
     };
@@ -119,7 +125,7 @@ export default function GroupInformationPage({ groupId }: { groupId: number }) {
       <S.TextMembersBox>
         <S.TextMembers>그룹원들</S.TextMembers>
         {data?.host && (
-          <div onClick={() => router.push("/group/" + data?.idx + "/member")}>
+          <div onClick={() => router.push("/group/members-management")}>
             <Image.OwnerButton />
           </div>
         )}
@@ -141,18 +147,20 @@ export default function GroupInformationPage({ groupId }: { groupId: number }) {
             <S.MemberName>{data?.head.name}</S.MemberName>
           </div>
         </S.MemberBox>
-        {data?.memberList.map((member) => (
-          <S.MemberBox key={member.idx}>
-            {!member.profileImg && <Image.DefaultProfileImage />}
-            {member.profileImg && (
-              <S.MemberImage src={member.profileImg} alt="그룹원 이미지" />
-            )}
-            <div>
-              <S.MemberRole>그룹원</S.MemberRole>
-              <S.MemberName>{member.name}</S.MemberName>
-            </div>
-          </S.MemberBox>
-        ))}
+        {data?.memberList
+          .filter((member) => member.idx !== data?.head.idx)
+          .map((member) => (
+            <S.MemberBox key={member.idx}>
+              {!member.profileImg && <Image.DefaultProfileImage />}
+              {member.profileImg && (
+                <S.MemberImage src={member.profileImg} alt="그룹원 이미지" />
+              )}
+              <div>
+                <S.MemberRole>그룹원</S.MemberRole>
+                <S.MemberName>{member.name}</S.MemberName>
+              </div>
+            </S.MemberBox>
+          ))}
       </S.MemberList>
     </S.GroupInformationPageLayout>
   );
