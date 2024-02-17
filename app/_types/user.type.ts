@@ -17,3 +17,12 @@ export interface TimerUserType {
   active: boolean;
   id: number;
 }
+
+export type MemberItemPropsType = {
+  isClicked: boolean;
+  handleClick(idx: number): void;
+  elementIndex: number;
+  idx: number;
+  name: string;
+  profileImg: string;
+};
