@@ -40,6 +40,7 @@ export default function MyPage() {
   useEffect(() => {
     const getMyInfo = async () => {
       setLoaded(false);
+
       try {
         const res: any = await userRequest.getMyData();
 
@@ -57,8 +58,6 @@ export default function MyPage() {
 
   const onLogout = () => {
     tokenService.removeUser();
-    setUserName("");
-    setUserImage("");
     setLogoutModal(false);
     toast.success("로그아웃 되었어요");
     router.replace("/");
@@ -148,7 +147,7 @@ export default function MyPage() {
             {myInfo?.groups.map((group) => (
               <Link
                 href={"/group/" + group.idx + "/information"}
-                key={group.idx}
+                key={crypto.randomUUID()}
               >
                 <MyPostCard idx={group.idx} name={group.name} img={group.img} />
               </Link>

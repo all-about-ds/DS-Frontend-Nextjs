@@ -36,8 +36,9 @@ export default function GroupInformationPage({ groupId }: { groupId: number }) {
   useEffect(() => {
     const checkServerClientSync = () => {
       if (
-        groupData.name !== "" &&
-        !groupData.memberList.some((member) => member.name === userName)
+        groupData?.name !== "" &&
+        !groupData?.memberList.some((member) => member.name === userName) &&
+        !groupData?.head.name === userName
       ) {
         router.replace("/");
         toast.error("잘못된 접근입니다");

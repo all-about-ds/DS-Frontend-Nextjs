@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as S from "./style";
 import * as Image from "@/app/_assets";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { toast } from "react-toastify";
 import { get, ref, set } from "firebase/database";
 import {
@@ -17,11 +17,11 @@ import { db } from "@/app/_shared/firebase";
 import { useRouter } from "next/navigation";
 import { Input } from "@/app/_components/ui/input/style";
 
-interface FormType {
+type FormType = {
   name: string;
   description: string;
   password: string | undefined;
-}
+};
 
 export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
   const [image, setImage] = useRecoilState<string>(ImagesAtom);
@@ -31,6 +31,7 @@ export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
   const [group, setGroup] = useState<GroupInformationType>();
   const [userName] = useRecoilState(UserDataAtomFamily("name"));
   const router = useRouter();
+  const [loaded, setLoaded] = useState(false);
   const { register, handleSubmit } = useForm<FormType>();
   const { postImage } = useImageToUrl();
 
@@ -38,6 +39,11 @@ export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
     const checkServerAndClientSync = () => {
       if (groupData && groupData.host) {
         setGroup(groupData);
+        setLoaded(true);
+      } else if (type === "create") {
+        setImage("");
+        setMemberNum(2);
+        setLoaded(true);
       } else {
         toast.error("잘못된 접근입니다.");
         router.replace("/");
@@ -92,6 +98,7 @@ export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
             active: false,
           });
           toast.success("생성되었어요!");
+          router.replace("/my-page");
         }
 
         if (type === "edit") {
@@ -129,10 +136,10 @@ export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
           }
           await groupRequest.editGroup(req, Number(group?.idx));
           toast.success("수정되었어요!");
+          router.replace("/group/" + group?.idx + "/information");
         }
 
         setImage("");
-        router.replace("/");
       } catch (e: any) {
         if (e.response.status === 400) {
           toast.error("잘못된 형식의 요청이에요!");
@@ -186,7 +193,7 @@ export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
 
   return (
     <>
-      {group !== undefined && (
+      {loaded && (
         <S.Layout>
           <S.TopText>DS</S.TopText>
           <S.TitleText>
@@ -311,7 +318,7 @@ export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
               <S.SubmithButtonBox>
                 <S.CancleButton
                   onClick={() =>
-                    router.push("/group/" + group.idx + "/information")
+                    router.push("/group/" + group?.idx + "/information")
                   }
                 >
                   취소
