@@ -18,11 +18,11 @@ export const groupRequestUrls = {
   },
 
   kickMember: () => {
-    return "group/member/";
+    return "member/";
   },
 
   mandateMember: () => {
-    return "group/mandate/";
+    return "member/";
   },
 
   deleteGroup: () => {

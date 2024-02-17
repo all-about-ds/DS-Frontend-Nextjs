@@ -114,7 +114,7 @@ class Group {
   mandateMember(groupId: number, memberId: number) {
     try {
       return instance({
-        method: "POST",
+        method: "PATCH",
         url: groupRequestUrls.mandateMember() + groupId + "/" + memberId,
         headers: {
           Authorization: "Bearer " + tokenService.getLocalAccessToken(),
