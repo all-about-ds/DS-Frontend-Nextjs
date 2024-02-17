@@ -8,5 +8,4 @@ export { AuthEmailAtomFamily } from "./container";
 export { ImagesAtom } from "./container";
 export { ImageSrcAtom } from "./container";
 export { GroupIsClickedAtom } from "./container";
-export { GroupIndexAtom } from "./container";
-export { GroupTitleAtom } from "./container";
+export { GroupDataAtom } from "./container";

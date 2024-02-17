@@ -1,5 +1,6 @@
 import { atom, atomFamily } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { GroupInformationType } from "../_types/group.type";
 const { persistAtom } = recoilPersist();
 
 export const SearchAtom = atom({
@@ -50,15 +51,21 @@ export const GroupIsClickedAtom = atom({
   default: false,
 });
 
-export const GroupIndexAtom = atom({
-  key: "gruopIndex",
-  default: 0,
-});
-
-export const GroupTitleAtom = atom({
-  key: "groupTitle",
-  default: "",
-  effects_UNSTABLE: [persistAtom],
+export const GroupDataAtom = atom<GroupInformationType>({
+  key: "groupInformation",
+  default: {
+    idx: 0,
+    name: "",
+    img: "",
+    description: "",
+    host: false,
+    head: {
+      idx: 0,
+      name: "",
+      profileImg: "",
+    },
+    memberList: [],
+  },
 });
 
 export const ImageSrcAtom = atom({
