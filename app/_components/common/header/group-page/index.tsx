@@ -2,23 +2,20 @@
 
 import * as S from "./style";
 import * as Image from "@/app/_assets";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { GroupTitleAtom } from "@/app/_atoms";
+import { usePathname, useRouter } from "next/navigation";
+import { GroupDataAtom } from "@/app/_atoms/container";
+import { useEffect, useState } from "react";
+import groupRequest from "@/app/_api/request/group.request";
+import { toast } from "react-toastify";
 
-type titleType = string | "그룹정보" | "타이머";
-
-export default function GroupPageHeader({
-  title,
-  groupId,
-}: {
-  title?: titleType;
-  groupId: number;
-}) {
+export default function GroupPageHeader({ idx }: { idx: number }) {
   const pathname = usePathname();
-  const [groupTitle, setGroupTitle] = useRecoilState(GroupTitleAtom);
+  const router = useRouter();
+  const [groupData, setGroupData] = useRecoilState(GroupDataAtom);
+  const resetGroupData = useResetRecoilState(GroupDataAtom);
+  const [groupName, setGroupName] = useState("");
 
   const select = (currentPath: string) => {
     if (currentPath === pathname) {
@@ -27,52 +24,53 @@ export default function GroupPageHeader({
   };
 
   useEffect(() => {
-    if (title !== undefined && title !== "타이머") {
-      setGroupTitle(title);
-    }
-  }, [title]);
+    const moveToClientSideData = () => {
+      if (groupData?.name) {
+        setGroupName(groupData?.name);
+      }
+    };
+
+    const getGroupgroupDataById = async () => {
+      try {
+        const res: any = await groupRequest.getGroupInformation(String(idx));
+        setGroupData(res.data);
+        moveToClientSideData();
+      } catch (e: any) {
+        if (e.response.status === 404) {
+          toast.error("존재하지 않는 그룹입니다");
+          router.replace("/");
+        }
+      }
+    };
+
+    resetGroupData();
+    getGroupgroupDataById();
+  }, [idx]);
 
   return (
     <S.GroupPageHeader>
       <S.Elements>
-        <Link
-          href={"/"}
-          onClick={() => {
-            setGroupTitle("");
-          }}
-        >
+        <Link href={"/"}>
           <Image.BackButton />
         </Link>
       </S.Elements>
       <S.Elements className="center">
-        <p>{title}</p>
+        <p>{groupName}</p>
       </S.Elements>
       <S.Elements>
-        <Link
-          href={{
-            pathname: "/group/" + groupId + "/chatting",
-            query: { groupName: String(groupTitle) },
-          }}
-          as={"/group/" + groupId + "/chatting"}
-        >
-          <div className={select("/group/" + groupId + "/chatting")}>
+        <Link href={"/group/" + idx + "/chatting"}>
+          <div className={select("/group/" + idx + "/chatting")}>
             <Image.ChattingIcon />
           </div>
         </Link>
-        <Link
-          href={{
-            pathname: "/group/" + groupId + "/timer",
-            query: { groupName: String(groupTitle) },
-          }}
-          as={"/group/" + groupId + "/timer"}
-        >
-          <div className={select("/group/" + groupId + "/timer")}>
+        <Link href={"/group/" + idx + "/timer"}>
+          <div className={select("/group/" + idx + "/timer")}>
             <Image.TimerIcon />
           </div>
         </Link>
         <Image.FaceTimeIcon />
-        <Link href={"/group/" + groupId + "/information"}>
-          <div className={select("/group/" + groupId + "/information")}>
+        <Link href={"/group/" + idx + "/information"}>
+          <div className={select("/group/" + idx + "/information")}>
             <Image.InformationIcon />
           </div>
         </Link>
