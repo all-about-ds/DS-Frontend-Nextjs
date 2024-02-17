@@ -12,6 +12,7 @@ import GroupPageHeader from "@/app/_components/common/header/group-page";
 import MemberTimerItem from "@/app/_components/ui/group/timer";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import groupRequest from "@/app/_api/request/group.request";
 
 type MyInfo = TimerUserType;
 
@@ -31,22 +32,29 @@ export default function GroupTimerPage({ groupId }: { groupId: number }) {
   });
 
   useEffect(() => {
-    const checkServerClientSync = () => {
-      if (
-        groupData?.name !== "" &&
-        !groupData?.memberList.some((member) => member.name === userName) &&
-        !groupData?.head.name === userName
-      ) {
-        router.replace("/");
-        toast.error("잘못된 접근입니다");
-        console.log("hi", userName, groupName);
-      } else if (groupData.name !== "") {
+    const checkServerAndClientSync = () => {
+      if (groupData?.name !== "") {
         setGroupName(groupData?.name);
-        console.log(userName, groupName);
       }
     };
 
-    checkServerClientSync();
+    const checkIsMember = async () => {
+      try {
+        const response: any = await groupRequest.isMember(groupId);
+
+        if (response.data.isMember) {
+          checkServerAndClientSync();
+        } else {
+          router.replace("/");
+          toast.error("잘못된 접근입니다");
+        }
+      } catch {
+        router.replace("/");
+        toast.error("잘못된 접근입니다");
+      }
+    };
+
+    checkIsMember();
   }, [groupData]);
 
   useEffect(() => {
