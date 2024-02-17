@@ -2,15 +2,19 @@ import { useEffect, useState } from "react";
 import * as S from "./style";
 import * as Image from "@/app/_assets";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { toast } from "react-toastify";
 import { get, ref, set } from "firebase/database";
-import { CreateGroupType, GroupBuilderType } from "@/app/_types/group.type";
-import { ImagesAtom, UserDataAtomFamily } from "@/app/_atoms";
+import {
+  CreateGroupType,
+  GroupBuilderType,
+  GroupInformationType,
+} from "@/app/_types/group.type";
+import { GroupDataAtom, ImagesAtom, UserDataAtomFamily } from "@/app/_atoms";
 import useImageToUrl from "@/app/_hooks/useImageToUrl";
 import groupRequest from "@/app/_api/request/group.request";
 import { db } from "@/app/_shared/firebase";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Input } from "@/app/_components/ui/input/style";
 
 interface FormType {
@@ -19,19 +23,29 @@ interface FormType {
   password: string | undefined;
 }
 
-export default function GroupBuilder({
-  groupType,
-}: {
-  groupType: GroupBuilderType;
-}) {
+export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
   const [image, setImage] = useRecoilState<string>(ImagesAtom);
   const [memberNum, setMemberNum] = useState<number>(2);
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const groupData = useRecoilValue(GroupDataAtom);
+  const [group, setGroup] = useState<GroupInformationType>();
   const [userName] = useRecoilState(UserDataAtomFamily("name"));
   const router = useRouter();
-  const params = useSearchParams();
   const { register, handleSubmit } = useForm<FormType>();
   const { postImage } = useImageToUrl();
+
+  useEffect(() => {
+    const checkServerAndClientSync = () => {
+      if (groupData && groupData.host) {
+        setGroup(groupData);
+      } else {
+        toast.error("잘못된 접근입니다.");
+        router.replace("/");
+      }
+    };
+
+    checkServerAndClientSync();
+  }, []);
 
   const memberUp = () => {
     if (memberNum !== 7) {
@@ -42,7 +56,7 @@ export default function GroupBuilder({
   };
 
   const memberDown = () => {
-    if (memberNum !== 2 && memberNum !== Number(params.get("maxCount")) + 1) {
+    if (memberNum !== 2 && memberNum !== Number(group?.memberList.length) + 1) {
       setMemberNum(memberNum - 1);
     } else {
       toast.error("현재 인원보다 낮게 설정할 수 없어요!");
@@ -70,7 +84,7 @@ export default function GroupBuilder({
           password: data.password,
         };
 
-        if (groupType === "create") {
+        if (type === "create") {
           await groupRequest.createGroup(req);
           set(ref(db, `timers/${data.name}/users/${userName}`), {
             name: userName,
@@ -80,10 +94,10 @@ export default function GroupBuilder({
           toast.success("생성되었어요!");
         }
 
-        if (groupType === "edit") {
-          if (params.get("title") !== req.name) {
-            const prevChatRef = ref(db, `chattings/${params.get("title")}`);
-            const prevTimerRef = ref(db, `timers/${params.get("title")}`);
+        if (type === "edit") {
+          if (group?.name !== req.name) {
+            const prevChatRef = ref(db, `chattings/${group?.name}`);
+            const prevTimerRef = ref(db, `timers/${group?.name}`);
             get(prevChatRef).then((snapshot) => {
               if (snapshot.exists()) {
                 const data = snapshot.val();
@@ -113,7 +127,7 @@ export default function GroupBuilder({
               }
             });
           }
-          await groupRequest.editGroup(req, Number(params.get("idx")));
+          await groupRequest.editGroup(req, Number(group?.idx));
           toast.success("수정되었어요!");
         }
 
@@ -162,9 +176,9 @@ export default function GroupBuilder({
   };
 
   useEffect(() => {
-    if (params.get("img")) {
-      setImage(String(params.get("img")));
-      setMemberNum(Number(params.get("maxCount")) + 1);
+    if (groupData?.img) {
+      setImage(String(groupData?.img));
+      setMemberNum(Number(groupData?.memberList.length) + 1);
     } else {
       setImage("");
     }
@@ -172,127 +186,142 @@ export default function GroupBuilder({
 
   return (
     <>
-      <S.Layout>
-        <S.TopText>DS</S.TopText>
-        <S.TitleText>
-          그룹
-          {groupType === "create" && " 만들기"}
-          {groupType === "edit" && " 수정하기"}
-        </S.TitleText>
-        <S.ElementsWrapper>
-          <form onSubmit={handleSubmit(onValid, inValid)}>
-            <S.BoldText>그룹 이름</S.BoldText>
-            <Input
-              placeholder="그룹 이름을 입력해주세요."
-              {...register("name", {
-                required: "이름은 필수 입력입니다.",
-                maxLength: 16,
-              })}
-              defaultValue={
-                groupType === "create" ? "" : String(params.get("title"))
-              }
-            />
-            <S.BoldText style={{ marginTop: "1.5rem" }}>그룹 설명</S.BoldText>
-            <S.Input
-              placeholder="그룹을 설명해주세요 (100자 이내)"
-              {...register("description", {
-                required: "설명은 필수 입력입니다.",
-                maxLength: 100,
-              })}
-              defaultValue={
-                groupType === "create" ? "" : String(params.get("description"))
-              }
-            ></S.Input>
-            <S.TextWrapper>
-              <S.BoldText style={{ marginTop: "2.5rem" }}>배너 사진</S.BoldText>
-              {image && (
+      {group !== undefined && (
+        <S.Layout>
+          <S.TopText>DS</S.TopText>
+          <S.TitleText>
+            그룹
+            {type === "create" && " 만들기"}
+            {type === "edit" && " 수정하기"}
+          </S.TitleText>
+          <S.ElementsWrapper>
+            <form onSubmit={handleSubmit(onValid, inValid)}>
+              <S.BoldText>그룹 이름</S.BoldText>
+              <Input
+                placeholder="그룹 이름을 입력해주세요."
+                {...register("name", {
+                  required: "이름은 필수 입력입니다.",
+                  maxLength: 16,
+                })}
+                defaultValue={type === "create" ? "" : String(group?.name)}
+              />
+              <S.BoldText style={{ marginTop: "1.5rem" }}>그룹 설명</S.BoldText>
+              <S.Input
+                placeholder="그룹을 설명해주세요 (100자 이내)"
+                {...register("description", {
+                  required: "설명은 필수 입력입니다.",
+                  maxLength: 100,
+                })}
+                defaultValue={
+                  type === "create" ? "" : String(group?.description)
+                }
+              ></S.Input>
+              <S.TextWrapper>
+                <S.BoldText style={{ marginTop: "2.5rem" }}>
+                  배너 사진
+                </S.BoldText>
+                {image && (
+                  <>
+                    <S.ChangeButton
+                      type={"file"}
+                      onChange={(e) => {
+                        if (!e.target?.files) return;
+                        encodeFileToBase64(e.target.files[0]);
+                      }}
+                      id={"image"}
+                      accept="image/*"
+                    />
+                    <S.ChangeText htmlFor="image">변경</S.ChangeText>
+                  </>
+                )}
+              </S.TextWrapper>
+              <S.ImageBox>
+                {image && (
+                  <S.UploadedImage
+                    src={image}
+                    alt="그룹이미지"
+                  ></S.UploadedImage>
+                )}
+                <S.ImageArea
+                  type={"file"}
+                  onChange={(e) => {
+                    if (!e.target?.files) return;
+                    encodeFileToBase64(e.target.files[0]);
+                  }}
+                  accept="image/*"
+                  id={"imageBox"}
+                />
+                <S.ImageLabel htmlFor="imageBox">
+                  <S.SmallBox>
+                    <Image.PhotoIcon />
+                  </S.SmallBox>
+                  <S.ImageText>이미지 업로드</S.ImageText>
+                </S.ImageLabel>
+              </S.ImageBox>
+              <S.BoldText style={{ marginTop: "2.5rem" }}>인원</S.BoldText>
+              <S.MemberBox>
+                <S.MemberTextWrapper>
+                  <S.Member>{memberNum < 2 ? 2 : memberNum}</S.Member>
+                  <S.Member>명</S.Member>
+                </S.MemberTextWrapper>
+                <S.ButtonBox>
+                  <S.Button onClick={memberUp}>
+                    <Image.ArrowUpIcon />
+                  </S.Button>
+                  <S.Button onClick={memberDown}>
+                    <Image.ArrowDownIcon />
+                  </S.Button>
+                </S.ButtonBox>
+              </S.MemberBox>
+              <S.BoldText style={{ marginTop: "1.5rem" }}>공개 여부</S.BoldText>
+              <S.RadiusButtonBox>
+                <S.LeftRadiusButton
+                  onClick={changePrivatePublic}
+                  style={isClicked ? { backgroundColor: "#7848DE" } : {}}
+                >
+                  <S.TextInButton style={isClicked ? { color: "#FFFFFF" } : {}}>
+                    비공개
+                  </S.TextInButton>
+                </S.LeftRadiusButton>
+                <S.RightRadiusButton
+                  onClick={changePrivatePublic}
+                  style={!isClicked ? { backgroundColor: "#7848DE" } : {}}
+                >
+                  <S.TextInButton
+                    style={!isClicked ? { color: "#FFFFFF" } : {}}
+                  >
+                    공개
+                  </S.TextInButton>
+                </S.RightRadiusButton>
+              </S.RadiusButtonBox>
+              {isClicked && (
                 <>
-                  <S.ChangeButton
-                    type={"file"}
-                    onChange={(e) => {
-                      if (!e.target?.files) return;
-                      encodeFileToBase64(e.target.files[0]);
-                    }}
-                    id={"image"}
-                    accept="image/*"
+                  <S.BoldText style={{ marginTop: "24px" }}>
+                    비밀번호
+                  </S.BoldText>
+                  <Input
+                    placeholder="숫자 4자리를 입력해주세요"
+                    type="password"
+                    {...register("password", {
+                      required: "비밀번호는 필수 입력입니다.",
+                    })}
                   />
-                  <S.ChangeText htmlFor="image">변경</S.ChangeText>
                 </>
               )}
-            </S.TextWrapper>
-            <S.ImageBox>
-              {image && (
-                <S.UploadedImage src={image} alt="그룹이미지"></S.UploadedImage>
-              )}
-              <S.ImageArea
-                type={"file"}
-                onChange={(e) => {
-                  if (!e.target?.files) return;
-                  encodeFileToBase64(e.target.files[0]);
-                }}
-                accept="image/*"
-                id={"imageBox"}
-              />
-              <S.ImageLabel htmlFor="imageBox">
-                <S.SmallBox>
-                  <Image.PhotoIcon />
-                </S.SmallBox>
-                <S.ImageText>이미지 업로드</S.ImageText>
-              </S.ImageLabel>
-            </S.ImageBox>
-            <S.BoldText style={{ marginTop: "2.5rem" }}>인원</S.BoldText>
-            <S.MemberBox>
-              <S.MemberTextWrapper>
-                <S.Member>{memberNum < 2 ? 2 : memberNum}</S.Member>
-                <S.Member>명</S.Member>
-              </S.MemberTextWrapper>
-              <S.ButtonBox>
-                <S.Button onClick={memberUp}>
-                  <Image.ArrowUpIcon />
-                </S.Button>
-                <S.Button onClick={memberDown}>
-                  <Image.ArrowDownIcon />
-                </S.Button>
-              </S.ButtonBox>
-            </S.MemberBox>
-            <S.BoldText style={{ marginTop: "1.5rem" }}>공개 여부</S.BoldText>
-            <S.RadiusButtonBox>
-              <S.LeftRadiusButton
-                onClick={changePrivatePublic}
-                style={isClicked ? { backgroundColor: "#7848DE" } : {}}
-              >
-                <S.TextInButton style={isClicked ? { color: "#FFFFFF" } : {}}>
-                  비공개
-                </S.TextInButton>
-              </S.LeftRadiusButton>
-              <S.RightRadiusButton
-                onClick={changePrivatePublic}
-                style={!isClicked ? { backgroundColor: "#7848DE" } : {}}
-              >
-                <S.TextInButton style={!isClicked ? { color: "#FFFFFF" } : {}}>
-                  공개
-                </S.TextInButton>
-              </S.RightRadiusButton>
-            </S.RadiusButtonBox>
-            {isClicked && (
-              <>
-                <S.BoldText style={{ marginTop: "24px" }}>비밀번호</S.BoldText>
-                <Input
-                  placeholder="숫자 4자리를 입력해주세요"
-                  type="password"
-                  {...register("password", {
-                    required: "비밀번호는 필수 입력입니다.",
-                  })}
-                />
-              </>
-            )}
-            <S.SubmithButtonBox>
-              <S.CancleButton onClick={() => router.back}>취소</S.CancleButton>
-              <S.SubmitButton>완료</S.SubmitButton>
-            </S.SubmithButtonBox>
-          </form>
-        </S.ElementsWrapper>
-      </S.Layout>
+              <S.SubmithButtonBox>
+                <S.CancleButton
+                  onClick={() =>
+                    router.push("/group/" + group.idx + "/information")
+                  }
+                >
+                  취소
+                </S.CancleButton>
+                <S.SubmitButton>완료</S.SubmitButton>
+              </S.SubmithButtonBox>
+            </form>
+          </S.ElementsWrapper>
+        </S.Layout>
+      )}
     </>
   );
 }
