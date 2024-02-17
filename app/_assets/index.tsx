@@ -31,4 +31,5 @@ export {
   ArrowDownIcon,
   SubmitArrowIcon,
   PhotoIcon,
+  LongRectengleIcon,
 } from "./svg/Icons";
