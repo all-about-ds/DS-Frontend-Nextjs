@@ -6,7 +6,7 @@ import GroupBuilder from "@/app/_components/ui/group/builder";
 export default function CreateGroupPage() {
   return (
     <CenterAlignmentLayout>
-      <GroupBuilder groupType="create" />
+      <GroupBuilder type="create" />
     </CenterAlignmentLayout>
   );
 }
