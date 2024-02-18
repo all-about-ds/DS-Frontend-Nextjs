@@ -5,6 +5,7 @@ import * as Image from "@/app/_assets/index";
 import { useEffect, useState } from "react";
 import userRequest from "@/app/_api/request/user.request";
 import { usePathname, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 export default function LoggedInHeader() {
   const router = useRouter();
@@ -15,19 +16,23 @@ export default function LoggedInHeader() {
   const [userImage, setUserImage] = useRecoilState(UserDataAtomFamily("image"));
 
   const getUser = async () => {
-    try {
-      const response: any = await userRequest.getHeaderData();
-
-      setUserName(response.data.name);
-      setUserImage(response.data.img);
-    } catch (e) {
-      Promise.reject(e);
-    }
+    const response: any = await userRequest.getHeaderData();
+    return response?.data;
   };
 
+  const { data: headerData, refetch: refetchHeaderData } = useQuery({
+    queryKey: ["get-header-data"],
+    queryFn: getUser,
+  });
+
   useEffect(() => {
-    getUser();
-  }, [pathname]);
+    setUserName(headerData?.name);
+    setUserImage(headerData?.img);
+  }, [headerData]);
+
+  useEffect(() => {
+    refetchHeaderData();
+  }, [pathname, userName, userImage]);
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValues((oldValue) => ({

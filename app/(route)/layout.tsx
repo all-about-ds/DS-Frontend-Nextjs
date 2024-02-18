@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import GlobalStyle from "./global-style";
 import RecoilRootWrapper from "./recoil-root-wrapper";
 import ToastProvider from "./toast-provider";
+import QueryProvider from "./query-provider";
 
 export const metadata: Metadata = {
   title: "Do Study",
@@ -19,7 +20,9 @@ export default function RootLayout({
       <RecoilRootWrapper>
         <GlobalStyle />
         <body>
-          <ToastProvider>{children}</ToastProvider>
+          <QueryProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </QueryProvider>
         </body>
       </RecoilRootWrapper>
     </html>

@@ -2,18 +2,17 @@
 
 import * as S from "./style";
 import * as Image from "@/app/_assets";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { GroupDataAtom } from "@/app/_atoms/container";
 import { useEffect, useState } from "react";
 import groupRequest from "@/app/_api/request/group.request";
-import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 export default function GroupPageHeader({ idx }: { idx: number }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [groupData, setGroupData] = useRecoilState(GroupDataAtom);
+  const setGroupData = useSetRecoilState(GroupDataAtom);
   const resetGroupData = useResetRecoilState(GroupDataAtom);
   const [groupName, setGroupName] = useState("");
 
@@ -23,28 +22,24 @@ export default function GroupPageHeader({ idx }: { idx: number }) {
     }
   };
 
+  const getUgetGroupgroupDataByIdser = async () => {
+    const response: any = await groupRequest.getGroupInformation(String(idx));
+    return response?.data;
+  };
+
+  const { data: headerData, refetch: refetchHeaderData } = useQuery({
+    queryKey: ["get-grou-header-data"],
+    queryFn: getUgetGroupgroupDataByIdser,
+  });
+
   useEffect(() => {
-    const moveToClientSideData = () => {
-      if (groupData?.name) {
-        setGroupName(groupData?.name);
-      }
-    };
+    setGroupData(headerData);
+    setGroupName(headerData?.name);
+  }, [headerData]);
 
-    const getGroupgroupDataById = async () => {
-      try {
-        const res: any = await groupRequest.getGroupInformation(String(idx));
-        setGroupData(res.data);
-        moveToClientSideData();
-      } catch (e: any) {
-        if (e.response.status === 404) {
-          toast.error("존재하지 않는 그룹입니다");
-          router.replace("/");
-        }
-      }
-    };
-
+  useEffect(() => {
     resetGroupData();
-    getGroupgroupDataById();
+    refetchHeaderData();
   }, [idx]);
 
   return (

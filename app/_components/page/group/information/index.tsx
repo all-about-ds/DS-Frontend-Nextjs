@@ -34,20 +34,29 @@ export default function GroupInformationPage({ groupId }: { groupId: number }) {
   const router = useRouter();
 
   useEffect(() => {
-    const checkServerClientSync = () => {
-      if (
-        groupData?.name !== "" &&
-        !groupData?.memberList.some((member) => member.name === userName) &&
-        !groupData?.head.name === userName
-      ) {
-        router.replace("/");
-        toast.error("잘못된 접근입니다");
-      } else if (groupData.name !== "") {
+    const checkServerAndClientSync = () => {
+      if (groupData?.name !== "") {
         setData(groupData);
       }
     };
 
-    checkServerClientSync();
+    const checkIsMember = async () => {
+      try {
+        const response: any = await groupRequest.isMember(groupId);
+
+        if (response.data.isMember) {
+          checkServerAndClientSync();
+        } else {
+          router.replace("/");
+          toast.error("잘못된 접근입니다");
+        }
+      } catch {
+        router.replace("/");
+        return toast.error("잘못된 접근입니다");
+      }
+    };
+
+    checkIsMember();
   }, [groupData]);
 
   const deleteGroup = async () => {

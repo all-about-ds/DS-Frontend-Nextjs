@@ -169,9 +169,9 @@ export default function GroupTimerPage({ groupId }: { groupId: number }) {
       <S.MemberTimerBox>
         {users
           .filter((item) => item.name !== userName)
-          .map((item, index) => (
+          .map((item) => (
             <MemberTimerItem
-              key={index}
+              key={item.id}
               memberName={item.name}
               memberTime={item.time}
               isActive={item.active}

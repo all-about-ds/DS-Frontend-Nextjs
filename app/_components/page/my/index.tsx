@@ -17,13 +17,12 @@ import EditProfileImageModal from "@/app/_components/modal/my/edit-profile";
 import MyPostCard from "@/app/_components/ui/post-card/my";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 
 export default function MyPage() {
   const router = useRouter();
-  const [myInfo, setMyInfo] = useState<GetMyDataType>();
   const [userName, setUserName] = useRecoilState(UserDataAtomFamily("name"));
   const [, setUserImage] = useRecoilState(UserDataAtomFamily("image"));
-  const [loaded, setLoaded] = useState<boolean>(false);
   const [logoutModal, setLogoutModal] = useRecoilState(
     ModalAtomFamily("logout")
   );
@@ -37,23 +36,29 @@ export default function MyPage() {
     ModalAtomFamily("editProfileImage")
   );
 
+  const getMyData = async () => {
+    const response: any = await userRequest.getMyData();
+    return response?.data;
+  };
+
+  const {
+    data: myData,
+    refetch: refetchMyData,
+    isLoading,
+    error,
+  } = useQuery<GetMyDataType>({
+    queryKey: ["get-my-data"],
+    queryFn: getMyData,
+  });
+
+  if (error) {
+    toast.error("잘못된 접근입니다");
+    tokenService.removeUser();
+    router.replace("/");
+  }
+
   useEffect(() => {
-    const getMyInfo = async () => {
-      setLoaded(false);
-
-      try {
-        const res: any = await userRequest.getMyData();
-
-        setMyInfo(res.data);
-        setLoaded(true);
-      } catch {
-        toast.error("잘못된 접근입니다");
-        tokenService.removeUser();
-        router.replace("/");
-      }
-    };
-
-    getMyInfo();
+    refetchMyData();
   }, [userName]);
 
   const onLogout = () => {
@@ -81,7 +86,7 @@ export default function MyPage() {
   };
 
   const removeUserOnFirebase = () => {
-    myInfo?.groups.map(async (item) => {
+    myData?.groups.map(async (item) => {
       await remove(ref(db, `timers/${item.name}/users/${userName}`));
     });
   };
@@ -106,31 +111,31 @@ export default function MyPage() {
           executeFunc={onWithdrawal}
         />
       )}
-      {editNameModal && <EditNameModal oldName={String(myInfo?.name)} />}
+      {editNameModal && <EditNameModal oldName={String(myData?.name)} />}
       {editProfileImageModal && <EditProfileImageModal />}
       <S.MyPageLayout>
         <S.ProfileSection>
           <S.NameBox>
-            <S.Name>{myInfo?.name}님의 프로필</S.Name>
+            <S.Name>{myData?.name}님의 프로필</S.Name>
             <Image.NormalIcon />
           </S.NameBox>
           <S.Description>
             프로필 사진과 닉네임으로 자신을 표현해봐요.
           </S.Description>
           <S.ProfileBox>
-            {!myInfo?.profileImg && <Image.DefaultProfileImage />}
-            {myInfo?.profileImg && (
-              <S.ProfileImage src={myInfo?.profileImg} alt="프로필 이미지" />
+            {!myData?.profileImg && <Image.DefaultProfileImage />}
+            {myData?.profileImg && (
+              <S.ProfileImage src={myData?.profileImg} alt="프로필 이미지" />
             )}
             <S.ColumnSortingBox>
-              <S.UpdateBox loaded={loaded}>
+              <S.UpdateBox loaded={!isLoading}>
                 <div onClick={() => setEditProfileImageModal(true)}>
                   <Image.UpdateProfileImageIcon />
                 </div>
                 <div onClick={() => setEditNameModal(true)}>
                   <Image.UpdateNameIcon />
                 </div>
-                <p>{myInfo?.name}</p>
+                <p>{myData?.name}</p>
               </S.UpdateBox>
               <S.LogoutButton onClick={() => setLogoutModal(true)}>
                 로그아웃
@@ -144,7 +149,7 @@ export default function MyPage() {
         <S.GroupSection>
           <S.GroupText>내 그룹</S.GroupText>
           <S.GroupList>
-            {myInfo?.groups.map((group) => (
+            {myData?.groups.map((group) => (
               <Link
                 href={"/group/" + group.idx + "/information"}
                 key={crypto.randomUUID()}
@@ -153,7 +158,7 @@ export default function MyPage() {
               </Link>
             ))}
           </S.GroupList>
-          {!myInfo?.groups.length && (
+          {!myData?.groups.length && (
             <S.MyGroupNotFound>
               <div>
                 <S.NotFoundText>아직 가입된 그룹이 없어요. 🧐</S.NotFoundText>
