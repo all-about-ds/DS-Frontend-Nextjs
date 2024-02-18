@@ -21,7 +21,7 @@ export default function AuthSectionContainer(props: AuthSectionContainerProps) {
       case 1:
         view.push(
           <FirstSection
-            key={1}
+            key={crypto.randomUUID()}
             title={props.title}
             setSection={setCurrentSection}
             atomKey={props.atomKey}
@@ -31,7 +31,7 @@ export default function AuthSectionContainer(props: AuthSectionContainerProps) {
       case 2:
         view.push(
           <SecondSection
-            key={2}
+            key={crypto.randomUUID()}
             title={props.title}
             setSection={setCurrentSection}
             atomKey={props.atomKey}
@@ -41,7 +41,7 @@ export default function AuthSectionContainer(props: AuthSectionContainerProps) {
       case 3:
         view.push(
           <ThirdSection
-            key={3}
+            key={crypto.randomUUID()}
             title={props.title}
             setSection={setCurrentSection}
             atomKey={props.atomKey}

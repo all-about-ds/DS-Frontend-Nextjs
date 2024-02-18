@@ -134,7 +134,7 @@ export default function GroupChattingPage({ groupId }: { groupId: number }) {
           <S.ChattingWrapper ref={scrollRef}>
             {chat &&
               chat.map((data: ChatMessageType, idx) => (
-                <div key={idx}>
+                <div key={crypto.randomUUID()}>
                   {data.userId !== userId && (
                     <S.ChatWrapper>
                       <S.MemberWrapper>
