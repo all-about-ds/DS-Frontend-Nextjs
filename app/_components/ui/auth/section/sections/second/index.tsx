@@ -39,8 +39,8 @@ export default function SecondSection(props: AuthFormSectionPropsType) {
   useEffect(() => {
     const countdown = setInterval(() => {
       if (timer.seconds > 0) {
-        setTimer((oldValue: { seconds: number }) => ({
-          ...oldValue,
+        setTimer((oldValue: { minute: number; seconds: number }) => ({
+          minute: oldValue.minute,
           seconds: oldValue.seconds - 1,
         }));
       }
