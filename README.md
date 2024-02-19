@@ -9,7 +9,7 @@ Do Study는 다양한 사람들과 간단하게 스터디를 맺고 동기부여
 
 ## Skills
 
-`Reactjs` `typescript` `axios` `@tanstack/react-query` `firebase` `emotion` `recoil` `react-hook-form` `IntersectionObserver` 
+`Nextjs` `typescript` `axios` `@tanstack/react-query` `firebase` `emotion` `recoil` `react-hook-form` `IntersectionObserver` 
 
 ## How To Start
 
