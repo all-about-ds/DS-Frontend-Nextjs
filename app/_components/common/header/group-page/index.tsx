@@ -2,9 +2,9 @@
 
 import * as S from "./style";
 import * as Image from "@/app/_assets";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { GroupDataAtom } from "@/app/_atoms/container";
 import { useEffect, useState } from "react";
 import groupRequest from "@/app/_api/request/group.request";
@@ -13,7 +13,6 @@ import { useQuery } from "@tanstack/react-query";
 export default function GroupPageHeader({ idx }: { idx: number }) {
   const pathname = usePathname();
   const setGroupData = useSetRecoilState(GroupDataAtom);
-  const resetGroupData = useResetRecoilState(GroupDataAtom);
   const [groupName, setGroupName] = useState("");
 
   const select = (currentPath: string) => {
@@ -38,7 +37,6 @@ export default function GroupPageHeader({ idx }: { idx: number }) {
   }, [headerData]);
 
   useEffect(() => {
-    resetGroupData();
     refetchHeaderData();
   }, [idx]);
 
