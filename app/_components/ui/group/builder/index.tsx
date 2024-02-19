@@ -51,7 +51,7 @@ export default function GroupBuilder({ type }: { type: GroupBuilderType }) {
     };
 
     checkServerAndClientSync();
-  }, []);
+  }, [groupData]);
 
   const memberUp = () => {
     if (memberNum !== 7) {
